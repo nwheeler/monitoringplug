@@ -1,3 +1,10 @@
+monitoringplug (0.17.1) monitoringplug; urgency=low
+
+  * Fix libldns references for Debian/Jessie
+  * Dockerize build process for generating debs
+
+ -- Nicholas Wheeler <nwheeler@devis.com> Mon, 06 Jul 2018 14:00:00 +0400
+
 monitoringplug (0.17.0-rc.1) monitoringplug; urgency=low
 
   * Rework autotools build system.
