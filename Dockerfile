@@ -1,5 +1,12 @@
 FROM debian:jessie
 
+ENV LANG=en_US.UTF-8
+ENV WORKSPACE=/workspace/
+RUN mkdir -p $WORKSPACE
+WORKDIR $WORKSPACE
+COPY . $WORKSPACE
+CMD $WORKSPACE/docker-entrypoint.sh
+
 RUN /bin/bash -c 'apt-get update && apt-get dist-upgrade -y -q && \
                   apt-get install -y -q \
                   autoconf \
@@ -38,7 +45,11 @@ RUN /bin/bash -c 'apt-get update && apt-get dist-upgrade -y -q && \
                   libtinfo-dev \
                   libxslt1.1 \
                   libjemalloc1 \
-                  libedit-dev'
+                  libedit-dev \
+                  locales && \
+                  sed -i -e "s/# $LANG.*/$LANG UTF-8/" /etc/locale.gen && \
+                  dpkg-reconfigure --frontend=noninteractive locales && \
+                  update-locale LANG=$LANG'
 
 # install varnish3 for check_varnish (which is probably rather deprecated at this point)
 RUN /bin/bash -c 'mkdir /varnish && cd /varnish && \
@@ -47,10 +58,5 @@ RUN /bin/bash -c 'mkdir /varnish && cd /varnish && \
                   ./autogen.sh && \
                   ./configure && \
                   make && \
-                  make install'
-
-ENV WORKSPACE=/workspace/
-RUN mkdir -p $WORKSPACE
-WORKDIR $WORKSPACE
-
-COPY . $WORKSPACE
+                  make install && \
+                  echo "libvarnishapi 1 libvarnishapi" > $WORKSPACE/debian/shlibs.local'
