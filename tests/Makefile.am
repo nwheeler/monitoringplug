@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-LDADD = ../lib/libmonitoringplug.a
+LDADD = ../lib/libmonitoringplug.a $(CHECK_LIBS)
 AM_LDFLAGS = $(CHECK_LIBS)
 AM_CFLAGS = $(CHECK_CFLAGS) -Dabs_srcdir="\"$(abs_srcdir)\""
 
@@ -18,8 +18,6 @@ check_monitoringplug_SOURCES = main.c main.h \
     check_eopt.c \
     check_utils.c \
 	check_perfdata.c
-
-check_monitoringplug_LDADD = $(LDADD) $(AM_LDFLAGS)
 
 check_sms_LDADD = ../lib/libsmsutils.a $(LDADD)
 
